@@ -23,6 +23,11 @@
                             <i class="bi bi-bag"></i> Manage Products</a>
                     @endcanany
 
+                    @canany(['create-category', 'edit-category', 'delete-category'])
+                        <a class="btn btn-danger" href="{{ route('categories.index') }}">
+                            <i class="bi bi-tags"></i> Manage Categories</a>
+                    @endcanany
+
                     {{-- @canany(['create-category', 'edit-category', 'delete-category'])
                         <a class="btn btn-primary" href="{{ route('categories.index') }}">
                             <i class="bi bi-person-fill-gear"></i> Manage Categories</a>
