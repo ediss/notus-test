@@ -10,6 +10,14 @@ use Illuminate\Contracts\View\View;
 
 class ProductController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:create-product|edit-product|delete-product');
+    }
+
+
     /**
      * Display a listing of the resource.
      */

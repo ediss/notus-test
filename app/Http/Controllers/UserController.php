@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\View\View;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\User\StoreUserRequest;
@@ -18,10 +16,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:create-user|edit-user|delete-user', ['only' => ['index','show']]);
-        $this->middleware('permission:create-user', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-user', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-user', ['only' => ['destroy']]);
+        $this->middleware('permission:create-user|edit-user|delete-user');
     }
 
     /**
@@ -76,14 +71,6 @@ class UserController extends Controller
      */
     public function edit(User $user, RoleService $service): View
     {
-        // Check Only Super Admin can update his own Profile
-        if ($user->hasRole('Super Admin')){
-
-            if($user->id !== auth()->user()->id){
-                abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
-            }
-        }
-
         return view('users.edit', [
             'user' => $user,
             'roles' => $service->getRoles(),
@@ -96,7 +83,6 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $data = $request->all();
  
         if(!empty($request->password)){
             $data['password'] = Hash::make($request->password);
@@ -104,7 +90,7 @@ class UserController extends Controller
             $data = $request->except('password');
         }
         
-        $user->update($data);
+        $user->update($request->all());
 
         $user->syncRoles($request->roles);
 

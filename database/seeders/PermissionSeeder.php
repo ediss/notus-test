@@ -25,7 +25,8 @@ class PermissionSeeder extends Seeder
             'delete-product',
             'create-comment',
             'edit-comment',
-            'delete-comment'
+            'delete-comment',
+            'approve-comment'
          ];
  
          foreach ($permissions as $permission) {

@@ -33,3 +33,6 @@ Route::resources([
     'categories' => CategoryController::class,
     'comments' => CommentController::class,
 ]);
+
+
+Route::post('/comments/{comment}/approveOrUnapprove', [CommentController::class, 'approveOrUnapprove'])->name('comments.approveOrUnapprove');

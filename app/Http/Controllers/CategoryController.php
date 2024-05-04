@@ -11,6 +11,13 @@ use Illuminate\Contracts\View\View;
 
 class CategoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:create-category|edit-category|delete-category');
+    }
+
     /**
      * Display a listing of the resource.
      */

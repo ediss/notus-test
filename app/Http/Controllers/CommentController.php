@@ -2,58 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCommentRequest;
-use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
+use App\Http\Requests\Comment\UpdateCommentRequest;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('permission:edit-comment|delete-comment', ['except' => ['create']]);
+    }
+
     public function index()
     {
-        //
+        
+        return view('comments.admin.index', [
+            'comments' => Comment::with('product')->paginate(10)
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCommentRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Comment $comment)
     {
-        //
+        
+        return view('comments.admin.edit', [
+            'comment' => $comment
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
-        //
+        $comment->update($request->all());
+
+        return redirect()->back()->withSuccess('Comment is updated.');
     }
 
     /**
@@ -61,6 +40,24 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        $comment->delete();
+
+        return redirect()->route('comments.index')->withSuccess('Comment is deleted successfully.');
+    }
+
+
+    public function approveOrUnapprove(Comment $comment)
+    {
+        if($comment->approved) {
+            $comment->update(['approved' => false]);
+
+            $message = 'unapproved';
+        } else {
+            $comment->update(['approved' => true]);
+            $message = 'approved';
+        }
+
+        
+        return redirect()->route('comments.index')->with('success', "Comment  $message successfully");
     }
 }

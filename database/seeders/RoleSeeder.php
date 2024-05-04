@@ -25,6 +25,7 @@ class RoleSeeder extends Seeder
             'create-comment',
             'edit-comment',
             'delete-comment',
+            'approve-comment',
 
             'create-category',
             'edit-category',
@@ -34,7 +35,8 @@ class RoleSeeder extends Seeder
         $moderator->givePermissionTo([
             'create-comment',
             'edit-comment',
-            'delete-comment'
+            'delete-comment',
+            'approve-comment',
         ]);
     }
 }
