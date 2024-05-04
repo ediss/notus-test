@@ -6,6 +6,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
+use App\Http\Services\CategoryService;
+use Illuminate\Contracts\View\View;
 
 class CategoryController extends Controller
 {
@@ -27,10 +29,10 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(CategoryService $service) : View
     {
         return view('categories.create', [
-            'parents' => Category::all()
+            'parents' => $service->getCategories()
         ]);
     }
 
@@ -59,11 +61,11 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(Category $category, CategoryService $service) : View
     {
         return view('categories.edit', [
             'category' => $category,
-            'parents' => Category::all(),
+            'parents' => $service->getCategories()
         ]);
     }
 

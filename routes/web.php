@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -30,4 +31,5 @@ Route::resources([
     'users' => UserController::class,
     'products' => ProductController::class,
     'categories' => CategoryController::class,
+    'comments' => CommentController::class,
 ]);

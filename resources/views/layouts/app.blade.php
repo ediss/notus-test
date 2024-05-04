@@ -49,14 +49,20 @@
                                 </li>
                             @endif
                         @else
-                            {{-- @canany(['create-role', 'edit-role', 'delete-role'])
-                                <li><a class="nav-link" href="{{ route('roles.index') }}">Manage Roles</a></li>
-                            @endcanany --}}
+          
                             @canany(['create-user', 'edit-user', 'delete-user'])
                                 <li><a class="nav-link" href="{{ route('users.index') }}">Manage Users</a></li>
                             @endcanany
                             @canany(['create-product', 'edit-product', 'delete-product'])
                                 <li><a class="nav-link" href="{{ route('products.index') }}">Manage Products</a></li>
+                            @endcanany
+
+                            @canany(['create-category', 'edit-category', 'delete-category'])
+                                <li><a class="nav-link" href="{{ route('categories.index') }}">Manage Categories</a></li>
+                            @endcanany
+
+                            @canany(['create-comment', 'edit-comment', 'delete-comment'])
+                                <li><a class="nav-link" href="{{ route('comments.index') }}">Manage Comments</a></li>
                             @endcanany
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
