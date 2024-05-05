@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Events\ProductDeleted;
+use Illuminate\Contracts\View\View;
+use App\Http\Services\CategoryService;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
-use App\Http\Services\CategoryService;
-use App\Models\Product;
-use Illuminate\Contracts\View\View;
 
 class ProductController extends Controller
 {
@@ -107,6 +108,12 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+
+        event(new ProductDeleted($product));
+
+        $product->delete();
+
+        return redirect()->route('products.index')
+                ->withSuccess('Prodcut is deleted successfully.');
     }
 }
