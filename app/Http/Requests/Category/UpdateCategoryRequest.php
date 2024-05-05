@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Category;
 
+use App\Models\Category;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCategoryRequest extends FormRequest
