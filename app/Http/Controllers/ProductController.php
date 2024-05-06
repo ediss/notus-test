@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Events\ProductDeleted;
 use Illuminate\Contracts\View\View;
+use App\Http\Services\ProductService;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Services\CategoryService;
+
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 
@@ -42,41 +45,18 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request, ProductService $service): RedirectResponse
     {
+        $data = $request->validated();
 
-        // Store the main image
-        $mainImage = $request->file('main_image');
-        $mainImagePath = $mainImage->store('public/products');
-
-        // Store the additional images
-        $additionalImagePaths = [];
-        if ($request->hasFile('additional_images')) {
-            foreach ($request->file('additional_images') as $additionalImage) {
-                $additionalImagePath = $additionalImage->store('public/products');
-                $additionalImagePaths[] = $additionalImagePath;
-            }
-        }
-
-    
-        $data = $request->all();
-        $data['main_image'] = str_replace('public/', 'storage/', $mainImagePath);
-
-    
-        $product = Product::create($data);
-
-
-        // Attach categories
-        $product->categories()->attach($request->categories);
-
-        // Save additional image paths in database
-        foreach ($additionalImagePaths as $imagePath) {
-            $product->images()->create([
-                'path' => str_replace('public/', 'storage/', $imagePath)
-            ]);
-        }
+        $service->createProduct(
+            $data,
+            $request->file('main_image'),
+            $request->file('additional_images') ?? []
+        );
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
+
     }
 
     /**
@@ -106,7 +86,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): RedirectResponse
     {
 
         event(new ProductDeleted($product));

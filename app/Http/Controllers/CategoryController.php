@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Services\CategoryService;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
-use App\Http\Services\CategoryService;
-use Illuminate\Contracts\View\View;
 
 class CategoryController extends Controller
 {
@@ -21,7 +21,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $categories = Category::with([
             'children.children',
@@ -36,7 +36,7 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(CategoryService $service) : View
+    public function create(CategoryService $service): View
     {
         return view('categories.create', [
             'parents' => $service->getCategories()
@@ -46,7 +46,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
         
         Category::create($request->all());
@@ -58,7 +58,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(Category $category): View
     {
         return view('categories.show', [
             'category' => $category
@@ -68,7 +68,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category, CategoryService $service) : View
+    public function edit(Category $category, CategoryService $service): View
     {
         return view('categories.edit', [
             'category' => $category,
@@ -79,7 +79,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
     {
 
         $category->update($request->all());
@@ -91,7 +91,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Category $category): RedirectResponse
     {
         $category->delete();
         return redirect()->route('categories.index')

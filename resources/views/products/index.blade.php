@@ -40,14 +40,10 @@
                                     @csrf
                                     @method('DELETE')
 
-                                    <a href="{{ route('products.show', $product->id) }}"
-                                        class="btn btn-warning btn-sm"><i class="bi bi-eye"></i> Show</a>
-
-
-                                    @can('edit-product')
+                                    {{-- @can('edit-product')
                                         <a href="{{ route('products.edit', $product->id) }}"
                                             class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
-                                    @endcan
+                                    @endcan --}}
 
                                     @can('delete-product')
                                         <button type="submit" class="btn btn-danger btn-sm"

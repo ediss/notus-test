@@ -29,5 +29,5 @@ Route::get('/products',                 [ProductController::class, 'index']);
 Route::get('/products/{product}',       [ProductController::class, 'show']);
 Route::post('/filter-products',          [ProductController::class, 'filter']);
 
-Route::post('/products/{product}/create-comment', [CommentController::class, 'store']);
+Route::post('/products/{product}/create-comment', [CommentController::class, 'store'])->name('product.create.comment');
 
